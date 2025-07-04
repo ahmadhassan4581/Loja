@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react'; // or use any icon library you prefer
+import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,14 +9,22 @@ export default function Navbar() {
     <nav className="bg-white shadow-md px-6 py-4">
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <div className="text-xl font-bold">Loja</div>
+        <div className="text-xl font-bold">
+          <Link to="/">Loja</Link>
+        </div>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6 text-sm">
-          <li className="cursor-pointer">Home</li>
-          <li className="cursor-pointer">Clothes</li>
+          <li className="cursor-pointer">
+            <Link to="/">Home</Link>
+          </li>
+          <li className="cursor-pointer">
+            <Link to="/mens">Mens</Link>
+          </li>
+          <li className="cursor-pointer">
+            <Link to="/womens">Womens</Link>
+          </li>
           <li className="cursor-pointer">Accessories</li>
-          <li className="cursor-pointer">Appliances</li>
           <li className="cursor-pointer">Loja Products</li>
           <li className="cursor-pointer">About Us</li>
         </ul>
@@ -40,10 +49,16 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden mt-4 space-y-4 text-sm">
           <ul className="space-y-2">
-            <li className="cursor-pointer">Home</li>
-            <li className="cursor-pointer">Clothes</li>
+            <li className="cursor-pointer">
+              <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
+            </li>
+            <li className="cursor-pointer">
+              <Link to="/mens" onClick={() => setIsOpen(false)}>Mens</Link>
+            </li>
+            <li className="cursor-pointer">
+              <Link to="/womens" onClick={() => setIsOpen(false)}>Womens</Link>
+            </li>
             <li className="cursor-pointer">Accessories</li>
-            <li className="cursor-pointer">Appliances</li>
             <li className="cursor-pointer">Loja Products</li>
             <li className="cursor-pointer">About Us</li>
           </ul>
