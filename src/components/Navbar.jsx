@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCart } from './CartProvider';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalItems } = useCart();
 
   return (
     <nav className="bg-white shadow-md px-6 py-4 sticky top-0 z-50">
@@ -34,23 +36,41 @@ export default function Navbar() {
         </ul>
 
         {/* Desktop Buttons */}
-        <div className="hidden md:flex gap-4">
+        <div className="hidden md:flex gap-6 items-center">
           <button className="text-sm text-gray-600 hover:text-indigo-600 transition">
             Login / Register
           </button>
           <button className="text-sm text-gray-600 hover:text-indigo-600 transition">
             Contact Us
           </button>
+          <Link to="/cart" className="relative">
+            <ShoppingCart className="text-gray-700 hover:text-indigo-600" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
 
         {/* Mobile Hamburger */}
-        <button
-          className="md:hidden text-gray-700"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        <div className="md:hidden flex items-center gap-4">
+          <Link to="/cart" className="relative">
+            <ShoppingCart className="text-gray-700" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </Link>
+          <button
+            className="text-gray-700"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Dropdown Menu */}
