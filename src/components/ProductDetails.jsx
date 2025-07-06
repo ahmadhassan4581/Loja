@@ -18,7 +18,7 @@ const ProductDetail = () => {
       <div className="py-10 px-6 text-center">
         <h2 className="text-2xl mb-4">Product not found</h2>
         <Link 
-          to="/mens" 
+          to="/" 
           className="bg-black text-white px-4 py-2 rounded inline-block"
         >
           Return to Shop
@@ -28,13 +28,22 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
+    // For clothing items (Mens/Womens), require size selection
+    if ((product.category.includes('Wear') || product.category.includes('Dress') || 
+         product.category.includes('Jeans') || product.category.includes('Jacket')) && 
+        !selectedSize) {
       alert('Please select a size');
       return;
     }
-    addToCart(product, selectedSize, quantity);
+    addToCart(product, selectedSize || 'One Size', quantity);
     alert(`${product.name} added to cart!`);
   };
+
+  // Determine if the product needs size selection
+  const needsSizeSelection = product.category.includes('Wear') || 
+                           product.category.includes('Dress') || 
+                           product.category.includes('Jeans') || 
+                           product.category.includes('Jacket');
 
   return (
     <section className="py-10 px-6 max-w-6xl mx-auto">
@@ -55,26 +64,28 @@ const ProductDetail = () => {
             <p className="text-2xl font-semibold">${product.price.toFixed(2)}</p>
           </div>
           
-          <p className="text-gray-700 pb-4 border-b">Premium quality product with excellent craftsmanship.</p>
+          <p className="text-gray-700 pb-4 border-b">{product.description || 'Premium quality product with excellent craftsmanship.'}</p>
 
-          {/* Size Selection */}
-          <div className="pt-4">
-            <h2 className="text-lg font-medium mb-4">Select Size</h2>
-            <div className="flex gap-3">
-              {['S', 'M', 'L', 'XL', 'XXL'].map(size => (
-                <button
-                  key={size}
-                  className={`w-12 h-12 flex items-center justify-center border-2 rounded-md transition-all
-                    ${selectedSize === size 
-                      ? 'border-black bg-black text-white' 
-                      : 'border-gray-300 hover:border-gray-500'}`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
+          {/* Size Selection - Only show for clothing items */}
+          {needsSizeSelection && (
+            <div className="pt-4">
+              <h2 className="text-lg font-medium mb-4">Select Size</h2>
+              <div className="flex gap-3">
+                {['S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                  <button
+                    key={size}
+                    className={`w-12 h-12 flex items-center justify-center border-2 rounded-md transition-all
+                      ${selectedSize === size 
+                        ? 'border-black bg-black text-white' 
+                        : 'border-gray-300 hover:border-gray-500'}`}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Add to Cart Button */}
           <button
@@ -88,7 +99,12 @@ const ProductDetail = () => {
           <div className="pt-6 border-t">
             <div className="flex gap-4 mb-2">
               <span className="font-medium">Category:</span>
-              <span>{product.category.includes('Men') ? "Men's Clothing" : "Women's Clothing"}</span>
+              <span>
+                {product.category.includes('Men') ? "Men's Clothing" : 
+                 product.category.includes('Women') ? "Women's Clothing" : 
+                 product.category.includes('Unisex') ? "Unisex Accessories" : 
+                 product.category}
+              </span>
             </div>
             <div className="flex gap-4">
               <span className="font-medium">Tags:</span>
@@ -96,7 +112,8 @@ const ProductDetail = () => {
                 <span className="bg-gray-100 px-2 py-1 rounded text-sm">Modern</span>
                 <span className="bg-gray-100 px-2 py-1 rounded text-sm">Latest</span>
                 <span className="bg-gray-100 px-2 py-1 rounded text-sm">
-                  {product.category.includes('Men') ? 'Masculine' : 'Feminine'}
+                  {product.category.includes('Men') ? 'Masculine' : 
+                   product.category.includes('Women') ? 'Feminine' : 'Unisex'}
                 </span>
               </div>
             </div>
